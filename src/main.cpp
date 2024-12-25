@@ -1,10 +1,16 @@
-//
-// Created by wangkang on 2023/12/3.
-//
 #include <iostream>
+#include "application/HeranutApp.h"
 
-int main()
+int main(int argc, char** argv)
 {
-    std::cout << "Hello, World!" << std::endl;
+    std::unique_ptr<HeraGui::Application> app;
+    app.reset(Hera::CreateApplication({ argc, argv }));
+
+    if(!app.get())
+        return -1;
+
+    app->Run();
+
     return 0;
 }
+
