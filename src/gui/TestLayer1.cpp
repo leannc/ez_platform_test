@@ -1,7 +1,7 @@
 #include "TestLayer1.h"
 #include <imgui.h>
 
-namespace Hera {
+namespace OsgImGui {
 
 
     TestLayer1::TestLayer1()

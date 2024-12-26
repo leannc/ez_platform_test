@@ -2,8 +2,11 @@
 
 #include <string>
 
-namespace HeraGui {
+namespace OsgCAD {
 
+/*! \class Layer
+ * \brief Define imGui layer basic class.
+*/
 class Layer
 {
     public:
@@ -14,6 +17,7 @@ class Layer
         virtual void OnDetach() {}
         virtual void OnImGuiRender() {}
 
+        /*! A method to get layer name. */
         inline const std::string& GetName() const { return m_DebugName; }
 
     protected:

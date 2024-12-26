@@ -1,30 +1,15 @@
 ﻿
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <assert.h>
-
 #include <osgViewer/Viewer>
-#include <osgViewer/ViewerEventHandlers>
-#include <osgViewer/config/SingleWindow>
-#include <osgDB/ReadFile>
-#include <osgUtil/Optimizer>
-#include <osgGA/TrackballManipulator>
 
-#include <imgui.h>
-#include <imgui_impl_opengl3.h>
+#include "Layer.h"
+#include "OsgViewSetup.h"
 
-#include "osgViewer/api/SDL2/sdlgraphicswindow.hpp"
-#include "OsgImGuiHandler.hpp"
-
-#include <SDL.h>
-#include <chrono>
-#include <memory>
-
-#include "LayerStack.h"
-
-namespace HeraGui {
+/*! \namespace OsgCAD
+ * \brief Application managerment.
+*/
+namespace OsgCAD {
 struct ApplicationCommandLineArgs
 {
     int Count = 0;
@@ -39,12 +24,16 @@ struct ApplicationCommandLineArgs
 
 struct ApplicationSpecification
 {
-    std::string Name = "Hera Application";
+    uint32_t Width = 1280;
+    uint32_t Height = 800;
+    std::string Name = "OsgCAD Application";
     std::string WorkingDirectory;
     ApplicationCommandLineArgs CommandLineArgs;
 };
 
-
+/*! \class Application
+ * \brief A application managerment class that contains OSG and imGui layers.
+*/
 class Application
 {
 public:
@@ -54,12 +43,25 @@ public:
     inline static Application& Get() {return *s_Instance;}
     const ApplicationSpecification& GetSpecification() const { return m_Specification; }
 
-    void PushLayer(Layer* layer);
-    void PushOverlay(Layer* layer);
-    void ImGuiRender();
+    template<typename T>
+    void PushLayer()
+    {
+        static_assert(std::is_base_of<Layer, T>::value, "Pushed type is not subclass of Layer!");
+        const auto &layer = std::make_shared<T>();
+        m_LayerStack.emplace_back(layer);
+        layer->OnAttach();
+    }
+
+    void PushLayer(const std::shared_ptr<Layer>& layer)
+    {
+        m_LayerStack.emplace_back(layer);
+        layer->OnAttach();
+    }
+
     void Close();
+
+    /*! A method to run the application in a loop. */
     void Run();
-    void loadData(int argc, char** argv);
 
 private:
     static Application* s_Instance;
@@ -67,18 +69,8 @@ private:
 
     bool m_nogui = false;
     bool m_Running = true;
-    bool m_Minimized = false;
-    LayerStack m_LayerStack;
-
-private:
-    /*!< A pointer to main window manager. */
-    osg::ref_ptr<SDLUtil::GraphicsWindowSDL2> m_graphicsWindow;
-
-     /*!< Root node for scene data.  */
-    osg::ref_ptr<osg::Group> m_root;
-
-     /*!< Construct the viewer. */
-    osgViewer::Viewer m_viewer;
+    std::vector<std::shared_ptr<Layer>> m_LayerStack;
+    std::unique_ptr<OsgWindow::OsgView> m_OsgView;
 };
 
 }

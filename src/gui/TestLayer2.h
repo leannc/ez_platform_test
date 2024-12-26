@@ -2,9 +2,9 @@
 
 #include "Layer.h"
 
-namespace Hera {
+namespace OsgImGui {
 
-class TestLayer2 : public HeraGui::Layer
+class TestLayer2 : public OsgCAD::Layer
     {
     public:
         TestLayer2();

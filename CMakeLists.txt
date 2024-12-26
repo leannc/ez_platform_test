@@ -1,12 +1,20 @@
 cmake_minimum_required(VERSION 3.8)
 project(osgCad C CXX)
 
+## Build options
+option(OSGCAD_BUILD_DOC "Build OSGCAD documentation (requires Doxygen installed)" OFF)
+
+
 if(UNIX)
     if("${CMAKE_CXX_COMPILER}" STREQUAL "/opt/atk-dlrk356x-toolchain/bin/aarch64-buildroot-linux-gnu-g++")
         set(CMAKE_SYSTEM_PROCESSOR          arm)
+
+        # defines
+        add_definitions(-DARM_PLATFORM)
     endif()
 endif()
 
+## Third party libs
 if(WIN32)
     if(CMAKE_SYSTEM_PROCESSOR STREQUAL "AMD64")
         set(CMAKE_PREFIX_PATH C:/opt/osg3.7.0-sdl2-win64-bin;C:/opt/SDL2-win64-bin)
@@ -80,5 +88,27 @@ elseif(UNIX)
     endif()
 endif()
 
+
+## Other build packages
+if(OSGCAD_BUILD_DOC)
+    message("Trying to build documentation")
+    find_package(Doxygen)
+    if (DOXYGEN_FOUND)
+        set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+        set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+        configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+        message("Doxygen build started")
+        add_custom_target( doc_doxygen ALL
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM )
+    else (DOXYGEN_FOUND)
+        message("Doxygen need to be installed to generate the doxygen documentation")
+    endif (DOXYGEN_FOUND)
+endif(OSGCAD_BUILD_DOC)
+
+
+## Adding subdirectories
 add_subdirectory(thirdparty)
 add_subdirectory(src)

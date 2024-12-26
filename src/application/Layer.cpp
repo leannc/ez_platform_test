@@ -1,6 +1,6 @@
 #include "Layer.h"
 
-namespace HeraGui {
+namespace OsgCAD {
 
     Layer::Layer(const std::string& debugName)
             : m_DebugName(debugName)

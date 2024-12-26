@@ -8,11 +8,13 @@ set(SOURCE_FILES
     main.cpp
     application/Application.cpp
     application/Application.h
-    application/HeranutApp.h
+    application/CoreApp.h
     application/Layer.cpp
     application/Layer.h
-    application/LayerStack.cpp
-    application/LayerStack.h
+    osgview/OsgImGuiHandler.cpp
+    osgview/OsgImGuiHandler.hpp
+    osgview/OsgViewSetup.cpp
+    osgview/OsgViewSetup.h
     gui/TestLayer1.cpp
     gui/TestLayer1.h
     gui/TestLayer2.cpp
@@ -21,8 +23,6 @@ set(SOURCE_FILES
 
 add_executable(${PROJECT_NAME}
     main.cpp
-    OsgImGuiHandler.hpp
-    OsgImGuiHandler.cpp
     ${SOURCE_FILES}
 )
 
@@ -45,6 +45,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/application
+    ${CMAKE_CURRENT_SOURCE_DIR}/osgview
     ${CMAKE_CURRENT_SOURCE_DIR}/gui
 )
 
