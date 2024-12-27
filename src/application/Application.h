@@ -1,15 +1,13 @@
 ﻿
 #pragma once
 
-#include <osgViewer/Viewer>
-
 #include "Layer.h"
 #include "OsgViewSetup.h"
 
-/*! \namespace OsgCAD
+/*! \namespace CAD
  * \brief Application managerment.
 */
-namespace OsgCAD {
+namespace CAD {
 struct ApplicationCommandLineArgs
 {
     int Count = 0;
@@ -43,18 +41,15 @@ public:
     inline static Application& Get() {return *s_Instance;}
     const ApplicationSpecification& GetSpecification() const { return m_Specification; }
 
-    template<typename T>
-    void PushLayer()
+    void PushLayer(Layer* layer)
     {
-        static_assert(std::is_base_of<Layer, T>::value, "Pushed type is not subclass of Layer!");
-        const auto &layer = std::make_shared<T>();
-        m_LayerStack.emplace_back(layer);
-        layer->OnAttach();
-    }
+        if(!layer)
+        {
+            std::cerr << "layer is invalid!" << std::endl;
+            return;
+        }
 
-    void PushLayer(const std::shared_ptr<Layer>& layer)
-    {
-        m_LayerStack.emplace_back(layer);
+        m_LayerStack.emplace_back(std::unique_ptr<Layer>(layer));
         layer->OnAttach();
     }
 
@@ -69,7 +64,7 @@ private:
 
     bool m_nogui = false;
     bool m_Running = true;
-    std::vector<std::shared_ptr<Layer>> m_LayerStack;
+    std::vector<std::unique_ptr<Layer>> m_LayerStack;
     std::unique_ptr<OsgWindow::OsgView> m_OsgView;
 };
 

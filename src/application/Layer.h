@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace OsgCAD {
+namespace CAD {
 
 /*! \class Layer
  * \brief Define imGui layer basic class.

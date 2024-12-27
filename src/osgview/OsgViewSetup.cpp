@@ -263,6 +263,8 @@ namespace OsgWindow {
 
     void OsgView::initOsgView( const std::string &title, uint32_t width, uint32_t height, const std::function<void()>& render_func )
     {
+        std::cout << __FUNCTION__ << std::endl;
+
         // create SDL window and GraphicsContext
         static std::unique_ptr<SDL_Window, SDLWindowDeleter> window;
         if(-1 == initSDLWindow(window, m_graphicsWindow, title, width, height))
@@ -313,43 +315,13 @@ namespace OsgWindow {
         m_viewer.setRealizeOperation( new InitOperation(func, name));
     }
 
-    void OsgView::exe( bool running, bool nogui )
+    void OsgView::closeImplementation()
     {
-        if (nogui)
-        {
-            while(running)
-            {
-                if(!running)
-                {
-                    break;
-                }
-
-                // other task
-
-            }
-        }
-        else
-        {
-            // check events and render frame
-            while (!m_viewer.done())
-            {
-                if(!running)
-                {
-                    break;
-                }
-
-                if (!m_graphicsWindow->checkEvents())
-                {
-                    osg::notify(osg::WARN) << "Failed to check events!" << std::endl;
-                    break;
-                }
-
-                m_viewer.frame();
-            }
-
+        if( m_graphicsWindow.valid() )
             m_graphicsWindow->closeImplementation();
-            SDL_Quit();
-        }
+
+        SDL_Quit();
+        std::cout << __FUNCTION__ << std::endl;
     }
 
     void OsgView::loadData(const std::string &filename)

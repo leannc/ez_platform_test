@@ -13,7 +13,7 @@
 
 int main(int argc, char** argv)
 {
-    std::unique_ptr<OsgCAD::Application> app;
+    std::unique_ptr<CAD::Application> app;
     app.reset(OsgImGui::CreateApplication({ argc, argv }));
 
     if(!app.get())

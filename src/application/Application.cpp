@@ -1,7 +1,7 @@
 ﻿
 #include "Application.h"
 
-namespace OsgCAD {
+namespace CAD {
 
     Application* Application::s_Instance= nullptr;
 
@@ -57,7 +57,38 @@ namespace OsgCAD {
     void Application::Run()
     {
         m_Running = true;
-        m_OsgView->exe( m_Running, m_nogui );
+        if (m_nogui)
+        {
+            while(m_Running)
+            {
+                if(!m_Running)
+                {
+                    break;
+                }
+
+                // other task
+
+            }
+        }
+        else
+        {
+
+            if(!m_OsgView)
+                return;
+
+            // check events and render frame
+            while (!m_OsgView->getViewer().done())
+            {
+                if(!m_Running)
+                {
+                    break;
+                }
+
+                m_OsgView->getViewer().frame();
+            }
+
+            m_OsgView->closeImplementation();
+        }
     }
 
 }

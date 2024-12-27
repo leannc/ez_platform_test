@@ -1,6 +1,6 @@
 #include "Layer.h"
 
-namespace OsgCAD {
+namespace CAD {
 
     Layer::Layer(const std::string& debugName)
             : m_DebugName(debugName)

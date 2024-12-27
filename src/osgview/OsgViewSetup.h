@@ -35,7 +35,6 @@ public:
     void initOsgView( const std::string &title, uint32_t width, uint32_t height, const std::function<void()>& render_func );
     void addEventHandler(osgGA::EventHandler* eventHandler);
     void setRealizeOperation(const std::function<void()>& func, const std::string &name);
-    void exe( bool running, bool nogui = false );
 
 public:
     /*! A method to visit osgViewer. */
@@ -43,6 +42,9 @@ public:
 
     /*! A pointer to root node. */
     osg::ref_ptr<osg::Group>& getRootNode() {return m_root;}
+
+    /*! A method to release all resources when app exit. */
+    void closeImplementation();
 
     /*! A method to load node data. */
     void loadData(const std::string &filename = "");

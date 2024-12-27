@@ -4,7 +4,7 @@
 
 namespace OsgImGui {
 
-class TestLayer1 : public OsgCAD::Layer
+class TestLayer1 : public CAD::Layer
     {
     public:
         TestLayer1();

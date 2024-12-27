@@ -9,21 +9,21 @@
 */
 namespace OsgImGui
 {
-class CoreGui : public OsgCAD::Application
+class CoreGui : public CAD::Application
     {
     public:
-        CoreGui(const OsgCAD::ApplicationSpecification& specification)
-                : OsgCAD::Application(specification)
+        CoreGui(const CAD::ApplicationSpecification& specification)
+                : CAD::Application(specification)
         {
-            PushLayer<TestLayer1>();
-            PushLayer<TestLayer2>();
+            PushLayer( new TestLayer1() );
+            PushLayer( new TestLayer2() );
         }
 
     };
 
-    OsgCAD::Application* CreateApplication(OsgCAD::ApplicationCommandLineArgs args)
+    CAD::Application* CreateApplication(CAD::ApplicationCommandLineArgs args)
     {
-        OsgCAD::ApplicationSpecification spec;
+        CAD::ApplicationSpecification spec;
         spec.Name = "OSG CAD";
         spec.CommandLineArgs = args;
 
